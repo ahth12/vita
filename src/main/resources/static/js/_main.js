@@ -10,9 +10,18 @@ Vue.component('check-form', {
 
 })
 
+new Vue({
+    el: '#row',
+    methods: {
+        checklistHandler: function (url) {
+            window.location.href = url
+        }
+    }
+})
+const redirectString = "google.com"
 Vue.component('check-row', {
     props: ['check'],
-    template: '<div> <i>{{check.id}}</i> {{check.checkerName}} {{check.checkTarget}} {{check.checkStatus}}</div>'
+    template: '<div id="row" v-on:click="checklistHandler(redirectString)"> <i>{{check.id}}</i> {{check.checkerName}} {{check.checkTarget}} {{check.checkStatus}}</div>'
 });
 
 
