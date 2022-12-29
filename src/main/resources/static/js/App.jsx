@@ -80,7 +80,7 @@ const Wrapper = () => {
                         </tr>
                         {object.checkLists.map((el) => {
                             return (
-                                <tr onClick={() => onRowClickHandler(el.checkListStatus, el.id)} key={el.id}>
+                                <tr style={{cursor: 'pointer'}}  onClick={() => onRowClickHandler(el.checkListStatus, el.id)} key={el.id}>
                                     <td>  {el.name}</td>
                                     <td>  {el.comment}</td>
                                     <td><span
