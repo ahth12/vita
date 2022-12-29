@@ -1,11 +1,13 @@
-const { useState, useEffect } = React
+const {useState, useEffect} = React
 const root = ReactDOM.createRoot(
     document.getElementById("app")
 );
 const Wrapper = () => {
     const [data, setData] = useState([])
     const [object, setObject] = useState(null)
-    const onClickHandler = (obj) => {setObject(obj)}
+    const onClickHandler = (obj) => {
+        setObject(obj)
+    }
     const patchData = async (url = '', data = {}) => {
         const response = await fetch(url, {
             method: 'PATCH',
@@ -41,31 +43,54 @@ const Wrapper = () => {
         fetchData()
     }, [])
     return (
-        <div>
+        <div className='main'>
             <div>
                 {data.length > 0 ? (
-                    data.map((el) => {
-                        return (
-                            <div onClick={() => onClickHandler(el)} style={{ cursor: 'pointer' }} key={el.id}>
-                                {el.id} {el.checkerName} {el.checkTarget} {el.checkStatus} {}
-                            </div>
-                        )
-                    })
+                    <table className='main--top-table'>
+                        <tbody>
+                        <tr>
+                            <td>Номер проверки</td>
+                            <td>Наименование проверяемого объекта</td>
+                            <td>Адрес</td>
+                            <td>Статус проверки</td>
+                        </tr>
+                        {data.map((el) => {
+                            return (
+                                <tr onClick={() => onClickHandler(el)} style={{cursor: 'pointer'}} key={el.id}>
+                                    <td>{el.id}</td>
+                                    <td> {el.checkerName} </td>
+                                    <td> {el.checkTarget} </td>
+                                    <td>{el.checkStatus}</td>
+                                </tr>
+                            )
+                        })}</tbody>
+                    </table>
                 ) : (
                     <div>Loading...</div>
                 )}
             </div>
             <div>
                 {object !== null && (
-                    <div>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>Наименование</td>
+                            <td>Комментарий</td>
+                            <td>Результат</td>
+                        </tr>
                         {object.checkLists.map((el) => {
                             return (
-                                <div onClick={() => onRowClickHandler(el.checkListStatus, el.id)} key={el.id}>
-                                    {el.id} {el.name} {el.comment} {el.checkListStatus}{' '}
-                                </div>
+                                <tr onClick={() => onRowClickHandler(el.checkListStatus, el.id)} key={el.id}>
+                                    <td>  {el.name}</td>
+                                    <td>  {el.comment}</td>
+                                    <td><span
+                                        className={el.checkListStatus === "OK" ? 'ok' : 'not-ok'}>{el.checkListStatus}</span>
+                                    </td>
+                                </tr>
                             )
                         })}
-                    </div>
+                        </tbody>
+                    </table>
                 )}
             </div>
         </div>

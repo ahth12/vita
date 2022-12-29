@@ -1,0 +1,20 @@
+td {
+    border: 1px solid black;
+    padding: 4px;
+}
+.main {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.main--top-table {
+    margin-bottom: 15px;
+}
+
+.ok {
+    color:green;
+}
+
+.not-ok {
+    color:red;
+}
