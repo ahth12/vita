@@ -32,6 +32,7 @@ public class CheckListController {
     public CheckList update(@PathVariable Long id, @RequestBody CheckList checkList){
         CheckList checkListFromDb = checkListRepository.findById(id).get();
         checkListFromDb.setCheckListStatus(checkList.getCheckListStatus());
+        checkListFromDb.setComment((checkList.getComment()));
         checkListRepository.save(checkListFromDb);
         return checkListFromDb;
     }

@@ -29,12 +29,17 @@ const Wrapper = () => {
             .then((data) => setData(data))
     }
 
-    const onRowClickHandler = (currentStatus, id) => {
+    const onRowClickHandler = (index, currentStatus, id) => {
         const status = currentStatus === 'OK' ? 'NOT_OK' : 'OK'
-        setData([])
-        setObject(null)
         patchData(`http://localhost:8080/checklist/${id}`, {checkListStatus: status}).then((res) => {
             if (res.name) {
+               const ar =  [...object.checkLists.map((el, ind) => {
+                    if (ind === index) {
+                        return {...el, checkListStatus: status}
+                    }
+                    return el
+                })]
+                setObject( {...object, checkLists: [...ar]})
                 fetchData()
             }
         })
@@ -78,9 +83,10 @@ const Wrapper = () => {
                             <td>Комментарий</td>
                             <td>Результат</td>
                         </tr>
-                        {object.checkLists.map((el) => {
+                        {object.checkLists.map((el, index) => {
                             return (
-                                <tr style={{cursor: 'pointer'}}  onClick={() => onRowClickHandler(el.checkListStatus, el.id)} key={el.id}>
+                                <tr style={{cursor: 'pointer'}}
+                                    onClick={() => onRowClickHandler(index, el.checkListStatus, el.id)} key={el.id}>
                                     <td>  {el.name}</td>
                                     <td>  {el.comment}</td>
                                     <td><span
