@@ -29,4 +29,14 @@ public class Check {
     private List<CheckList> checkLists;
 
 
+    @Override
+    public String toString() {
+        return "Check{" +
+                "id=" + id +
+                ", checkerName='" + checkerName + '\'' +
+                ", checkTarget='" + checkTarget + '\'' +
+                ", checkStatus=" + checkStatus +
+                ", checkLists="+
+                '}';
+    }
 }

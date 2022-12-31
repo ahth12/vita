@@ -5,8 +5,24 @@ const root = ReactDOM.createRoot(
 const Wrapper = () => {
     const [data, setData] = useState([])
     const [object, setObject] = useState(null)
+    const [isFocus, setIsFocus] = useState(null)
+    const [value, setValue] = useState('')
     const onClickHandler = (obj) => {
         setObject(obj)
+    }
+    const sendComment = (value, id, index) => {
+        patchData(`http://localhost:8080/checklist/${id}`, {comment: value}).then((res) => {
+            if (res.name) {
+                const ar = [...object.checkLists.map((el, ind) => {
+                    if (ind === index) {
+                        return {...el, comment: value}
+                    }
+                    return el
+                })]
+                setObject({...object, checkLists: [...ar]})
+
+            }
+        })
     }
     const patchData = async (url = '', data = {}) => {
         const response = await fetch(url, {
@@ -29,17 +45,18 @@ const Wrapper = () => {
             .then((data) => setData(data))
     }
 
+
     const onRowClickHandler = (index, currentStatus, id) => {
         const status = currentStatus === 'OK' ? 'NOT_OK' : 'OK'
         patchData(`http://localhost:8080/checklist/${id}`, {checkListStatus: status}).then((res) => {
             if (res.name) {
-               const ar =  [...object.checkLists.map((el, ind) => {
+                const ar = [...object.checkLists.map((el, ind) => {
                     if (ind === index) {
                         return {...el, checkListStatus: status}
                     }
                     return el
                 })]
-                setObject( {...object, checkLists: [...ar]})
+                setObject({...object, checkLists: [...ar]})
                 fetchData()
             }
         })
@@ -85,11 +102,22 @@ const Wrapper = () => {
                         </tr>
                         {object.checkLists.map((el, index) => {
                             return (
-                                <tr style={{cursor: 'pointer'}}
-                                    onClick={() => onRowClickHandler(index, el.checkListStatus, el.id)} key={el.id}>
+                                <tr key={el.id}>
                                     <td>  {el.name}</td>
-                                    <td>  {el.comment}</td>
-                                    <td><span
+                                    <td><input onChange={(e) => {
+                                        if (isFocus === el.id){
+                                            setValue(e.target.value)
+                                        }
+                                    }} onFocus={(e) => {
+                                        setIsFocus(el.id)
+                                        setValue(e.target.value)
+                                    }} onBlur={e => {
+                                        sendComment(value, el.id, index)
+                                        setIsFocus(null)
+                                        setValue('')
+                                    }} value={isFocus === el.id ? value : el.comment}/></td>
+                                    <td style={{cursor: 'pointer'}}
+                                        onClick={() => onRowClickHandler(index, el.checkListStatus, el.id)}><span
                                         className={el.checkListStatus === "OK" ? 'ok' : 'not-ok'}>{el.checkListStatus}</span>
                                     </td>
                                 </tr>
