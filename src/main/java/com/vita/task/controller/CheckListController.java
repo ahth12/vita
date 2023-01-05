@@ -30,7 +30,9 @@ public class CheckListController {
     @PatchMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public CheckList update(@PathVariable Long id, @RequestBody CheckList checkList) {
         CheckList checkListFromDb = checkListRepository.findById(id).get();
-        if (checkList.getCheckListStatus() != null) checkListFromDb.setCheckListStatus(checkList.getCheckListStatus());
+        if (checkList.getCheckListStatus() != null) {
+            checkListFromDb.setCheckListStatus(checkList.getCheckListStatus());
+        }
         if (checkList.getComment() != null) {
             checkListFromDb.setComment((checkList.getComment()));
         }
